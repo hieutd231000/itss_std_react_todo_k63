@@ -6,16 +6,17 @@
 */
 import { useState, useEffect } from 'react';
 
-function TodoItem({item}) {
+function TodoItem({item, onClickBox}) {
   const [check, setCheck] = useState(true);
-  const handleChange = () => {
+  const onclick = (key) => {
     setCheck(!check);
+    onClickBox(key);
   }
   return (
     <label className="panel-block">
       <input 
         type="checkbox" 
-        onChange = {handleChange}
+        onClick={() => onclick(item.key)}
       />
       <div className={check ? "" : "has-text-grey-light" }>{item.text}</div>
     </label>

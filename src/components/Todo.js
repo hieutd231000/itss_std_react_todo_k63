@@ -26,6 +26,42 @@ function Todo() {
     { key: getKey(), text: '明日の準備をする', done: false },
     /* テストコード 終了 */
   ]);
+
+  const [tab,setTab] = useState("すべて");
+  const itemTab = () => {
+      const tabItem = items.filter((item) => {
+          if (tab === "すべて")
+              return item;
+          if (tab === "未完了" && !item.done) {
+              return item;
+          }
+          if (tab === "完了済み" && item.done) {
+              return item;
+          }
+      });
+      return tabItem;
+  };
+  const handleChangeTab = (target) =>{
+      setTab(target);
+  };
+  const onClickBox = (key) => {
+    items.map(item => {
+      if(item.key === key) {
+        item.done = !item.done;
+      }
+    });
+    putItems([...items]);
+  }
+
+  const todo = itemTab().map(item => (
+    <TodoItem 
+         key={item.key}
+         item={item}
+         onClickBox={onClickBox}
+    />
+  ));
+
+  
   const [inputValue, setInputValue] = useState("");
   const handleChange = (event) => {
     setInputValue(event.target.value);
@@ -50,12 +86,8 @@ function Todo() {
         onKeyDown = {onAddTodo}
         placeholder = "Enter new to do"
       />
-      {items.map(item => (
-        <TodoItem
-          key = {item.key}
-          item = {item} 
-        /> 
-      ))}
+      <Filter onClick={handleChangeTab}/>
+      {todo}
       <div className="panel-block">
         {items.length} items
       </div>
