@@ -26,12 +26,30 @@ function Todo() {
     { key: getKey(), text: '明日の準備をする', done: false },
     /* テストコード 終了 */
   ]);
+  const [inputValue, setInputValue] = useState("");
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  }
+  const onAddTodo = (event) => {
+    if(event.key === "Enter") {
+      putItems(items => [...items, { key: getKey(), text: event.target.value, done: false }]);
+      setInputValue("");
+    }
+  }
 
   return (
     <div className="panel">
       <div className="panel-heading">
         ITSS ToDoアプリ
       </div>
+      <input
+        className = "input"
+        type = "text"
+        value = {inputValue}
+        onChange = {handleChange}
+        onKeyDown = {onAddTodo}
+        placeholder = "Enter new to do"
+      />
       {items.map(item => (
         <TodoItem
           key = {item.key}
